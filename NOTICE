@@ -1,0 +1,32 @@
+lmaws
+Copyright (c) 2026 Lattice Systems LLC
+
+This product includes material derived from the AWS API MCP Server in
+awslabs/mcp (https://github.com/awslabs/mcp/tree/main/src/aws-api-mcp-server),
+licensed under the Apache License, Version 2.0 (see LICENSE-APACHE). Its NOTICE
+reads:
+
+  awslabs.aws-api-mcp-server
+  Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
+
+Derived files (Apache-2.0):
+
+  data/api-metadata.json  Derived from awslabs' core/data/api_metadata.json:
+                          restructured into per-service readOnly/write lists,
+                          with awslabs' explicit overrides applied (for example
+                          sts AssumeRole, iam CreateAccessKey and
+                          sso GetRoleCredentials are classified as write) and
+                          their hand-tuned custom read-only list merged in.
+  src/metadata.ts         Read/write classification over that data,
+                          reimplemented in TypeScript (service aliases such as
+                          s3api -> s3; unknown operations are left unclassified
+                          and treated as write by the caller).
+
+Modifications by Lattice Systems LLC: the data was converted from awslabs'
+format and extended as described above; the classification is used by a
+standalone CLI instead of an MCP server.
+
+The allowlisted query surface (src/lm-query.ts, src/aws-catalog.ts: the
+aws_command/aws_policy logic) originated in lmctl-ai/lmprobe (MIT, Lattice
+Systems LLC) and was ported to TypeScript. All other files are original work of
+Lattice Systems LLC under the MIT License in LICENSE.

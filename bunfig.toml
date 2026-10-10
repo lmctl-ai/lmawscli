@@ -1,0 +1,5 @@
+[test]
+# Coverage gate for CI: `bun test --coverage` exits non-zero below these ratios.
+# Bun reads the plural keys (lines/functions); singular keys are silently ignored.
+coverageThreshold = { lines = 0.85, functions = 0.85 }
+coverageSkipTestFiles = true
