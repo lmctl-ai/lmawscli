@@ -1,0 +1,19 @@
+// access: read
+// What it does: Directly queries STS caller identity for active account and principal.
+// When to use it: Fast check of caller identity using the dedicated STS operation.
+// How to run: lmscript examples/caller-identity.lms
+// How to preview: lmscript --dry-run examples/caller-identity.lms
+import "@lmctl-ai/lmaws";
+
+r = aws2.get_caller_identity({});
+
+if (r.status == "simulated") {
+  println("would run: aws2.get_caller_identity");
+} else if (r.status != "ok") {
+  println("Error:", get(r, "error.message", "failed to get caller identity"));
+  exit(1);
+} else {
+  println(f"Account: {r.result.Account}");
+  println(f"UserId: {r.result.UserId}");
+  println(f"Arn: {r.result.Arn}");
+}

@@ -1,0 +1,20 @@
+// access: read
+// What it does: Lists CloudFormation stacks and their current deployment status.
+// When to use it: Monitor infrastructure-as-code deployments or detect failed rollouts.
+// How to run: lmscript examples/stack-status.lms [filter]
+// How to preview: lmscript --dry-run examples/stack-status.lms [filter]
+import "@lmctl-ai/lmaws";
+
+status = len(ARGV) > 0 ? ARGV[0] : "CREATE_COMPLETE";
+r = aws2.cfn_list_stacks({ statusFilter: status });
+
+if (r.status == "simulated") {
+  println("would run: aws2.cfn_list_stacks");
+} else if (r.status != "ok") {
+  println("Error:", get(r, "error.message", "failed to list CloudFormation stacks"));
+  exit(1);
+} else {
+  for (s in r.result.StackSummaries) {
+    println(f"{s.StackName}: {s.StackStatus} ({s.CreationTime})");
+  }
+}

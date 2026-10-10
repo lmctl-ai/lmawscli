@@ -1,0 +1,22 @@
+// access: read
+// What it does: Queries STS GetCallerIdentity to inspect current account, ARN, and user ID.
+// When to use it: Verify active AWS credentials and IAM identity before running cloud operations.
+// How to run: lmscript examples/whoami.lms [region] [profile]
+// How to preview: lmscript --dry-run examples/whoami.lms [region] [profile]
+import "@lmctl-ai/lmaws" as aws;
+
+reg = len(ARGV) > 0 ? ARGV[0] : "us-east-1";
+prof = len(ARGV) > 1 ? ARGV[1] : "default";
+
+r = aws.lm_query({ service: "sts", operation: "get-caller-identity", region: reg, profile: prof });
+
+if (r.status == "simulated") {
+  println("would run: aws2.lm_query");
+} else if (r.status != "ok") {
+  println("Error:", get(r, "error.message", "failed to query caller identity"));
+  exit(1);
+} else {
+  id = r.result;
+  println(f"Account: {id.Account} | UserId: {id.UserId}");
+  println(f"Arn: {id.Arn}");
+}

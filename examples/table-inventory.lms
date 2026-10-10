@@ -1,0 +1,20 @@
+// access: read
+// What it does: Lists DynamoDB tables present in the AWS account.
+// When to use it: Audit DynamoDB database tables or verify table availability.
+// How to run: lmscript examples/table-inventory.lms [limit]
+// How to preview: lmscript --dry-run examples/table-inventory.lms [limit]
+import "@lmctl-ai/lmaws";
+
+maxTables = len(ARGV) > 0 ? num(ARGV[0]) : 50;
+r = aws2.dynamodb_list_tables({ limit: maxTables });
+
+if (r.status == "simulated") {
+  println("would run: aws2.dynamodb_list_tables");
+} else if (r.status != "ok") {
+  println("Error:", get(r, "error.message", "failed to list DynamoDB tables"));
+  exit(1);
+} else {
+  for (name in r.result.TableNames) {
+    println(f"Table: {name}");
+  }
+}

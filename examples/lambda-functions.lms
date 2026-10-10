@@ -1,0 +1,20 @@
+// access: read
+// What it does: Lists serverless AWS Lambda functions configured in the account.
+// When to use it: Discover active serverless functions, runtimes, and handlers.
+// How to run: lmscript examples/lambda-functions.lms [limit]
+// How to preview: lmscript --dry-run examples/lambda-functions.lms [limit]
+import "@lmctl-ai/lmaws";
+
+maxFuncs = len(ARGV) > 0 ? num(ARGV[0]) : 50;
+r = aws2.lambda_list_functions({ maxItems: maxFuncs });
+
+if (r.status == "simulated") {
+  println("would run: aws2.lambda_list_functions");
+} else if (r.status != "ok") {
+  println("Error:", get(r, "error.message", "failed to list Lambda functions"));
+  exit(1);
+} else {
+  for (fnItem in r.result.Functions) {
+    println(f"{fnItem.FunctionName} ({fnItem.Runtime}) - handler: {fnItem.Handler}");
+  }
+}

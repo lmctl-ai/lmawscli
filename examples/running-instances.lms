@@ -1,0 +1,21 @@
+// access: read
+// What it does: Lists EC2 instances currently in the running state.
+// When to use it: Audit active EC2 virtual machines and compute resources.
+// How to run: lmscript examples/running-instances.lms
+// How to preview: lmscript --dry-run examples/running-instances.lms
+import "@lmctl-ai/lmaws";
+
+r = aws2.ec2_describe_instances({ filters: "Name=instance-state-name,Values=running" });
+
+if (r.status == "simulated") {
+  println("would run: aws2.ec2_describe_instances");
+} else if (r.status != "ok") {
+  println("Error:", get(r, "error.message", "failed to describe instances"));
+  exit(1);
+} else {
+  for (res in r.result.Reservations) {
+    for (inst in res.Instances) {
+      println(f"{inst.InstanceId} ({inst.InstanceType}) - {inst.State.Name}");
+    }
+  }
+}

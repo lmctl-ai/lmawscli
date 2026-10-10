@@ -269,6 +269,14 @@ async function main(): Promise<number> {
           profile: process.env['AWS_PROFILE'],
         }),
       }),
+      product: {
+        name: 'aws',
+        supported: '>=2.34.0 <3.0.0',
+        detect: {
+          argv: ['aws', '--version'],
+          pattern: 'aws-cli/(\\d+\\.\\d+\\.\\d+)',
+        },
+      },
     },
     process.argv.slice(2),
   );

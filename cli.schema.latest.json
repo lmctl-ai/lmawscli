@@ -1,0 +1,1031 @@
+{
+  "schema": "cli.schema.v1",
+  "tool": "aws2",
+  "version": "0.1.0",
+  "policy": {
+    "dryrun": true,
+    "readonly": true
+  },
+  "inputs": [
+    "flags",
+    "json",
+    "graphql"
+  ],
+  "operations": [
+    {
+      "name": "run",
+      "access": "dynamic",
+      "description": "Run an arbitrary AWS op: aws2 run --service ec2 --op describe-instances [--args '[\"--filters\",\"...\"]']",
+      "params": [
+        {
+          "name": "service",
+          "type": "string",
+          "description": "AWS service, e.g. ec2, s3, s3api"
+        },
+        {
+          "name": "op",
+          "type": "string",
+          "description": "Operation in kebab-case, e.g. describe-instances"
+        },
+        {
+          "name": "args",
+          "type": "string",
+          "occurs": "?",
+          "description": "Extra args as JSON array or string"
+        },
+        {
+          "name": "query",
+          "type": "string",
+          "occurs": "?",
+          "description": "JMESPath expression (aws --query)"
+        },
+        {
+          "name": "maxPages",
+          "type": "number",
+          "occurs": "?",
+          "description": "Follow NextToken up to N pages (default 1)"
+        }
+      ]
+    },
+    {
+      "name": "exec",
+      "access": "dynamic",
+      "description": "Raw argv pass-through: aws2 exec s3api list-buckets",
+      "params": [
+        {
+          "name": "_",
+          "type": "array",
+          "items": "string",
+          "occurs": "*",
+          "description": "Full aws CLI argv"
+        },
+        {
+          "name": "query",
+          "type": "string",
+          "occurs": "?",
+          "description": "JMESPath expression (aws --query)"
+        },
+        {
+          "name": "maxPages",
+          "type": "number",
+          "occurs": "?",
+          "description": "Follow NextToken up to N pages (default 1)"
+        }
+      ]
+    },
+    {
+      "name": "services",
+      "access": "read",
+      "description": "List all AWS services present in the read/write metadata (381 services)",
+      "params": [
+        {
+          "name": "query",
+          "type": "string",
+          "occurs": "?",
+          "description": "JMESPath expression (aws --query)"
+        },
+        {
+          "name": "maxPages",
+          "type": "number",
+          "occurs": "?",
+          "description": "Follow NextToken up to N pages (default 1)"
+        }
+      ]
+    },
+    {
+      "name": "get_caller_identity",
+      "access": "read",
+      "description": "STS GetCallerIdentity",
+      "params": [
+        {
+          "name": "query",
+          "type": "string",
+          "occurs": "?",
+          "description": "JMESPath expression (aws --query)"
+        },
+        {
+          "name": "maxPages",
+          "type": "number",
+          "occurs": "?",
+          "description": "Follow NextToken up to N pages (default 1)"
+        }
+      ]
+    },
+    {
+      "name": "s3_list_buckets",
+      "access": "read",
+      "description": "List all S3 buckets",
+      "params": [
+        {
+          "name": "query",
+          "type": "string",
+          "occurs": "?",
+          "description": "JMESPath expression (aws --query)"
+        },
+        {
+          "name": "maxPages",
+          "type": "number",
+          "occurs": "?",
+          "description": "Follow NextToken up to N pages (default 1)"
+        }
+      ]
+    },
+    {
+      "name": "s3_list_objects",
+      "access": "read",
+      "description": "List objects in an S3 bucket",
+      "params": [
+        {
+          "name": "bucket",
+          "type": "string",
+          "description": "Bucket name"
+        },
+        {
+          "name": "prefix",
+          "type": "string",
+          "occurs": "?",
+          "description": "Prefix filter"
+        },
+        {
+          "name": "query",
+          "type": "string",
+          "occurs": "?",
+          "description": "JMESPath expression (aws --query)"
+        },
+        {
+          "name": "maxPages",
+          "type": "number",
+          "occurs": "?",
+          "description": "Follow NextToken up to N pages (default 1)"
+        }
+      ]
+    },
+    {
+      "name": "s3_put_object",
+      "access": "write",
+      "description": "Put an object into S3",
+      "params": [
+        {
+          "name": "bucket",
+          "type": "string",
+          "description": "Bucket"
+        },
+        {
+          "name": "key",
+          "type": "string",
+          "description": "Object key"
+        },
+        {
+          "name": "body",
+          "type": "string",
+          "description": "File path to upload"
+        },
+        {
+          "name": "query",
+          "type": "string",
+          "occurs": "?",
+          "description": "JMESPath expression (aws --query)"
+        },
+        {
+          "name": "maxPages",
+          "type": "number",
+          "occurs": "?",
+          "description": "Follow NextToken up to N pages (default 1)"
+        }
+      ]
+    },
+    {
+      "name": "s3_get_object",
+      "access": "read",
+      "description": "Get an object body (to stdout)",
+      "params": [
+        {
+          "name": "bucket",
+          "type": "string",
+          "description": "Bucket"
+        },
+        {
+          "name": "key",
+          "type": "string",
+          "description": "Object key"
+        },
+        {
+          "name": "query",
+          "type": "string",
+          "occurs": "?",
+          "description": "JMESPath expression (aws --query)"
+        },
+        {
+          "name": "maxPages",
+          "type": "number",
+          "occurs": "?",
+          "description": "Follow NextToken up to N pages (default 1)"
+        }
+      ]
+    },
+    {
+      "name": "ec2_describe_instances",
+      "access": "read",
+      "description": "Describe EC2 instances",
+      "params": [
+        {
+          "name": "filters",
+          "type": "string",
+          "occurs": "?",
+          "description": "ec2 --filters string"
+        },
+        {
+          "name": "maxResults",
+          "type": "number",
+          "occurs": "?",
+          "description": "Page size"
+        },
+        {
+          "name": "query",
+          "type": "string",
+          "occurs": "?",
+          "description": "JMESPath expression (aws --query)"
+        },
+        {
+          "name": "maxPages",
+          "type": "number",
+          "occurs": "?",
+          "description": "Follow NextToken up to N pages (default 1)"
+        }
+      ]
+    },
+    {
+      "name": "ec2_stop_instances",
+      "access": "write",
+      "description": "Stop EC2 instances",
+      "params": [
+        {
+          "name": "instanceIds",
+          "type": "array",
+          "items": "string",
+          "occurs": "+",
+          "description": "Array of instance IDs"
+        },
+        {
+          "name": "query",
+          "type": "string",
+          "occurs": "?",
+          "description": "JMESPath expression (aws --query)"
+        },
+        {
+          "name": "maxPages",
+          "type": "number",
+          "occurs": "?",
+          "description": "Follow NextToken up to N pages (default 1)"
+        }
+      ]
+    },
+    {
+      "name": "ec2_start_instances",
+      "access": "write",
+      "description": "Start EC2 instances",
+      "params": [
+        {
+          "name": "instanceIds",
+          "type": "array",
+          "items": "string",
+          "occurs": "+",
+          "description": "Array of instance IDs"
+        },
+        {
+          "name": "query",
+          "type": "string",
+          "occurs": "?",
+          "description": "JMESPath expression (aws --query)"
+        },
+        {
+          "name": "maxPages",
+          "type": "number",
+          "occurs": "?",
+          "description": "Follow NextToken up to N pages (default 1)"
+        }
+      ]
+    },
+    {
+      "name": "ec2_reboot_instances",
+      "access": "write",
+      "description": "Reboot EC2 instances",
+      "params": [
+        {
+          "name": "instanceIds",
+          "type": "array",
+          "items": "string",
+          "occurs": "+",
+          "description": "Array of instance IDs"
+        },
+        {
+          "name": "query",
+          "type": "string",
+          "occurs": "?",
+          "description": "JMESPath expression (aws --query)"
+        },
+        {
+          "name": "maxPages",
+          "type": "number",
+          "occurs": "?",
+          "description": "Follow NextToken up to N pages (default 1)"
+        }
+      ]
+    },
+    {
+      "name": "iam_list_roles",
+      "access": "read",
+      "description": "List IAM roles",
+      "params": [
+        {
+          "name": "maxItems",
+          "type": "number",
+          "occurs": "?",
+          "description": "Page size"
+        },
+        {
+          "name": "pathPrefix",
+          "type": "string",
+          "occurs": "?",
+          "description": "Filter by path"
+        },
+        {
+          "name": "query",
+          "type": "string",
+          "occurs": "?",
+          "description": "JMESPath expression (aws --query)"
+        },
+        {
+          "name": "maxPages",
+          "type": "number",
+          "occurs": "?",
+          "description": "Follow NextToken up to N pages (default 1)"
+        }
+      ]
+    },
+    {
+      "name": "iam_list_users",
+      "access": "read",
+      "description": "List IAM users",
+      "params": [
+        {
+          "name": "maxItems",
+          "type": "number",
+          "occurs": "?",
+          "description": "Page size"
+        },
+        {
+          "name": "query",
+          "type": "string",
+          "occurs": "?",
+          "description": "JMESPath expression (aws --query)"
+        },
+        {
+          "name": "maxPages",
+          "type": "number",
+          "occurs": "?",
+          "description": "Follow NextToken up to N pages (default 1)"
+        }
+      ]
+    },
+    {
+      "name": "iam_list_policies",
+      "access": "read",
+      "description": "List IAM policies",
+      "params": [
+        {
+          "name": "scope",
+          "type": "string",
+          "occurs": "?",
+          "enum": [
+            "All",
+            "AWS",
+            "Local"
+          ],
+          "description": "Policy scope (All|AWS|Local)"
+        },
+        {
+          "name": "maxItems",
+          "type": "number",
+          "occurs": "?",
+          "description": "Page size"
+        },
+        {
+          "name": "query",
+          "type": "string",
+          "occurs": "?",
+          "description": "JMESPath expression (aws --query)"
+        },
+        {
+          "name": "maxPages",
+          "type": "number",
+          "occurs": "?",
+          "description": "Follow NextToken up to N pages (default 1)"
+        }
+      ]
+    },
+    {
+      "name": "lambda_list_functions",
+      "access": "read",
+      "description": "List Lambda functions",
+      "params": [
+        {
+          "name": "maxItems",
+          "type": "number",
+          "occurs": "?",
+          "description": "Page size"
+        },
+        {
+          "name": "query",
+          "type": "string",
+          "occurs": "?",
+          "description": "JMESPath expression (aws --query)"
+        },
+        {
+          "name": "maxPages",
+          "type": "number",
+          "occurs": "?",
+          "description": "Follow NextToken up to N pages (default 1)"
+        }
+      ]
+    },
+    {
+      "name": "lambda_invoke",
+      "access": "write",
+      "description": "Invoke a Lambda function",
+      "params": [
+        {
+          "name": "functionName",
+          "type": "string",
+          "description": "Function name"
+        },
+        {
+          "name": "payload",
+          "type": "string",
+          "occurs": "?",
+          "description": "JSON payload"
+        },
+        {
+          "name": "query",
+          "type": "string",
+          "occurs": "?",
+          "description": "JMESPath expression (aws --query)"
+        },
+        {
+          "name": "maxPages",
+          "type": "number",
+          "occurs": "?",
+          "description": "Follow NextToken up to N pages (default 1)"
+        }
+      ]
+    },
+    {
+      "name": "cfn_list_stacks",
+      "access": "read",
+      "description": "List CloudFormation stacks",
+      "params": [
+        {
+          "name": "statusFilter",
+          "type": "string",
+          "occurs": "?",
+          "description": "Stack status filter"
+        },
+        {
+          "name": "query",
+          "type": "string",
+          "occurs": "?",
+          "description": "JMESPath expression (aws --query)"
+        },
+        {
+          "name": "maxPages",
+          "type": "number",
+          "occurs": "?",
+          "description": "Follow NextToken up to N pages (default 1)"
+        }
+      ]
+    },
+    {
+      "name": "cfn_describe_stacks",
+      "access": "read",
+      "description": "Describe CloudFormation stacks",
+      "params": [
+        {
+          "name": "stackName",
+          "type": "string",
+          "occurs": "?",
+          "description": "Stack name"
+        },
+        {
+          "name": "query",
+          "type": "string",
+          "occurs": "?",
+          "description": "JMESPath expression (aws --query)"
+        },
+        {
+          "name": "maxPages",
+          "type": "number",
+          "occurs": "?",
+          "description": "Follow NextToken up to N pages (default 1)"
+        }
+      ]
+    },
+    {
+      "name": "cfn_delete_stack",
+      "access": "write",
+      "description": "DESTRUCTIVE: delete a CloudFormation stack (requires --confirm)",
+      "params": [
+        {
+          "name": "stackName",
+          "type": "string",
+          "description": "Stack name"
+        },
+        {
+          "name": "query",
+          "type": "string",
+          "occurs": "?",
+          "description": "JMESPath expression (aws --query)"
+        },
+        {
+          "name": "maxPages",
+          "type": "number",
+          "occurs": "?",
+          "description": "Follow NextToken up to N pages (default 1)"
+        }
+      ]
+    },
+    {
+      "name": "dynamodb_list_tables",
+      "access": "read",
+      "description": "List DynamoDB tables",
+      "params": [
+        {
+          "name": "limit",
+          "type": "number",
+          "occurs": "?",
+          "description": "Max tables"
+        },
+        {
+          "name": "query",
+          "type": "string",
+          "occurs": "?",
+          "description": "JMESPath expression (aws --query)"
+        },
+        {
+          "name": "maxPages",
+          "type": "number",
+          "occurs": "?",
+          "description": "Follow NextToken up to N pages (default 1)"
+        }
+      ]
+    },
+    {
+      "name": "dynamodb_create_table",
+      "access": "write",
+      "description": "Create a DynamoDB table",
+      "params": [
+        {
+          "name": "tableName",
+          "type": "string",
+          "description": "Table name"
+        },
+        {
+          "name": "attributeDefinitions",
+          "type": "string",
+          "description": "Attribute definitions (aws shorthand or JSON)"
+        },
+        {
+          "name": "keySchema",
+          "type": "string",
+          "description": "Key schema (aws shorthand or JSON)"
+        },
+        {
+          "name": "billingMode",
+          "type": "string",
+          "occurs": "?",
+          "enum": [
+            "PROVISIONED",
+            "PAY_PER_REQUEST"
+          ],
+          "default": "PAY_PER_REQUEST",
+          "description": "Billing mode (PROVISIONED|PAY_PER_REQUEST)"
+        },
+        {
+          "name": "query",
+          "type": "string",
+          "occurs": "?",
+          "description": "JMESPath expression (aws --query)"
+        },
+        {
+          "name": "maxPages",
+          "type": "number",
+          "occurs": "?",
+          "description": "Follow NextToken up to N pages (default 1)"
+        }
+      ]
+    },
+    {
+      "name": "dynamodb_put_item",
+      "access": "write",
+      "description": "Put an item into a DynamoDB table",
+      "params": [
+        {
+          "name": "tableName",
+          "type": "string",
+          "description": "Table name"
+        },
+        {
+          "name": "item",
+          "type": "string",
+          "description": "Item JSON"
+        },
+        {
+          "name": "query",
+          "type": "string",
+          "occurs": "?",
+          "description": "JMESPath expression (aws --query)"
+        },
+        {
+          "name": "maxPages",
+          "type": "number",
+          "occurs": "?",
+          "description": "Follow NextToken up to N pages (default 1)"
+        }
+      ]
+    },
+    {
+      "name": "dynamodb_delete_table",
+      "access": "write",
+      "description": "DESTRUCTIVE: delete a DynamoDB table (requires --confirm)",
+      "params": [
+        {
+          "name": "tableName",
+          "type": "string",
+          "description": "Table name"
+        },
+        {
+          "name": "query",
+          "type": "string",
+          "occurs": "?",
+          "description": "JMESPath expression (aws --query)"
+        },
+        {
+          "name": "maxPages",
+          "type": "number",
+          "occurs": "?",
+          "description": "Follow NextToken up to N pages (default 1)"
+        }
+      ]
+    },
+    {
+      "name": "logs_describe_log_groups",
+      "access": "read",
+      "description": "Describe CloudWatch log groups",
+      "params": [
+        {
+          "name": "limit",
+          "type": "number",
+          "occurs": "?",
+          "description": "Page size"
+        },
+        {
+          "name": "logGroupNamePrefix",
+          "type": "string",
+          "occurs": "?",
+          "description": "Prefix"
+        },
+        {
+          "name": "query",
+          "type": "string",
+          "occurs": "?",
+          "description": "JMESPath expression (aws --query)"
+        },
+        {
+          "name": "maxPages",
+          "type": "number",
+          "occurs": "?",
+          "description": "Follow NextToken up to N pages (default 1)"
+        }
+      ]
+    },
+    {
+      "name": "ecs_list_clusters",
+      "access": "read",
+      "description": "List ECS clusters",
+      "params": [
+        {
+          "name": "query",
+          "type": "string",
+          "occurs": "?",
+          "description": "JMESPath expression (aws --query)"
+        },
+        {
+          "name": "maxPages",
+          "type": "number",
+          "occurs": "?",
+          "description": "Follow NextToken up to N pages (default 1)"
+        }
+      ]
+    },
+    {
+      "name": "ecs_list_services",
+      "access": "read",
+      "description": "List ECS services in a cluster",
+      "params": [
+        {
+          "name": "cluster",
+          "type": "string",
+          "description": "Cluster name/ARN"
+        },
+        {
+          "name": "maxResults",
+          "type": "number",
+          "occurs": "?",
+          "description": "Page size"
+        },
+        {
+          "name": "query",
+          "type": "string",
+          "occurs": "?",
+          "description": "JMESPath expression (aws --query)"
+        },
+        {
+          "name": "maxPages",
+          "type": "number",
+          "occurs": "?",
+          "description": "Follow NextToken up to N pages (default 1)"
+        }
+      ]
+    },
+    {
+      "name": "ecs_describe_services",
+      "access": "read",
+      "description": "Describe ECS services",
+      "params": [
+        {
+          "name": "cluster",
+          "type": "string",
+          "description": "Cluster name/ARN"
+        },
+        {
+          "name": "services",
+          "type": "array",
+          "items": "string",
+          "occurs": "+",
+          "description": "Array of service names/ARNs"
+        },
+        {
+          "name": "query",
+          "type": "string",
+          "occurs": "?",
+          "description": "JMESPath expression (aws --query)"
+        },
+        {
+          "name": "maxPages",
+          "type": "number",
+          "occurs": "?",
+          "description": "Follow NextToken up to N pages (default 1)"
+        }
+      ]
+    },
+    {
+      "name": "pricing_describe_services",
+      "access": "read",
+      "description": "Pricing DescribeServices (us-east-1 only)",
+      "params": [
+        {
+          "name": "serviceCode",
+          "type": "string",
+          "occurs": "?",
+          "description": "Service code"
+        },
+        {
+          "name": "maxResults",
+          "type": "number",
+          "occurs": "?",
+          "description": "Page size"
+        },
+        {
+          "name": "query",
+          "type": "string",
+          "occurs": "?",
+          "description": "JMESPath expression (aws --query)"
+        },
+        {
+          "name": "maxPages",
+          "type": "number",
+          "occurs": "?",
+          "description": "Follow NextToken up to N pages (default 1)"
+        }
+      ]
+    },
+    {
+      "name": "catalog",
+      "access": "read",
+      "description": "List the reviewed, allowlisted read-only AWS operations",
+      "params": [
+        {
+          "name": "query",
+          "type": "string",
+          "occurs": "?",
+          "description": "JMESPath expression (aws --query)"
+        },
+        {
+          "name": "maxPages",
+          "type": "number",
+          "occurs": "?",
+          "description": "Follow NextToken up to N pages (default 1)"
+        }
+      ]
+    },
+    {
+      "name": "lm_query",
+      "access": "read",
+      "description": "Allowlisted AWS query with JSON parameters, redaction, and pagination (lmprobe-style)",
+      "params": [
+        {
+          "name": "service",
+          "type": "string",
+          "description": "AWS service from the catalog (ec2, s3api, iam, ...)"
+        },
+        {
+          "name": "operation",
+          "type": "string",
+          "description": "Exact operation name (describe-instances, list-objects-v2, ...)"
+        },
+        {
+          "name": "params",
+          "type": "object",
+          "occurs": "?",
+          "description": "AWS API parameters object (native field names)"
+        },
+        {
+          "name": "profile",
+          "type": "string",
+          "occurs": "?",
+          "description": "AWS CLI profile"
+        },
+        {
+          "name": "region",
+          "type": "string",
+          "occurs": "?",
+          "description": "AWS region"
+        },
+        {
+          "name": "maxItems",
+          "type": "number",
+          "occurs": "?",
+          "description": "Cap on paginated results (default 100; 1..10000)"
+        },
+        {
+          "name": "pageSize",
+          "type": "number",
+          "occurs": "?",
+          "description": "Native page size (paginated ops only)"
+        },
+        {
+          "name": "startingToken",
+          "type": "string",
+          "occurs": "?",
+          "description": "Resume token from a previous query"
+        },
+        {
+          "name": "firstPage",
+          "type": "boolean",
+          "occurs": "?",
+          "description": "Only fetch the first page (conflicts with pagination controls)"
+        },
+        {
+          "name": "select",
+          "type": "string",
+          "occurs": "?",
+          "description": "JSON Pointer, e.g. /Reservations/0/Instances"
+        },
+        {
+          "name": "timeoutSeconds",
+          "type": "number",
+          "occurs": "?",
+          "default": 60,
+          "description": "Process deadline (1..300; default 60)"
+        },
+        {
+          "name": "query",
+          "type": "string",
+          "occurs": "?",
+          "description": "JMESPath expression (aws --query)"
+        },
+        {
+          "name": "maxPages",
+          "type": "number",
+          "occurs": "?",
+          "description": "Follow NextToken up to N pages (default 1)"
+        }
+      ]
+    }
+  ],
+  "globals": [
+    {
+      "name": "dryrun",
+      "type": "boolean",
+      "occurs": "?",
+      "aliases": [
+        "dry-run"
+      ],
+      "description": "Simulate write operations"
+    },
+    {
+      "name": "readonly",
+      "type": "boolean",
+      "occurs": "?",
+      "aliases": [
+        "read-only"
+      ],
+      "description": "Refuse to run write operations"
+    },
+    {
+      "name": "confirm",
+      "type": "boolean",
+      "occurs": "?",
+      "aliases": [
+        "i-understand"
+      ],
+      "description": "Confirm dangerous operations"
+    },
+    {
+      "name": "json",
+      "type": "boolean",
+      "occurs": "?",
+      "description": "Output as JSON"
+    },
+    {
+      "name": "help",
+      "type": "boolean",
+      "occurs": "?",
+      "aliases": [
+        "h"
+      ],
+      "description": "Show help"
+    },
+    {
+      "name": "list",
+      "type": "boolean",
+      "occurs": "?",
+      "description": "List operations as JSON"
+    },
+    {
+      "name": "schema",
+      "type": "boolean",
+      "occurs": "?",
+      "description": "Print schema document"
+    },
+    {
+      "name": "explain",
+      "type": "string",
+      "occurs": "?",
+      "description": "Explain an operation"
+    },
+    {
+      "name": "format",
+      "type": "string",
+      "occurs": "?",
+      "description": "Format for explain (text or json)"
+    },
+    {
+      "name": "input-json",
+      "type": "string",
+      "occurs": "?",
+      "aliases": [
+        "inputJson"
+      ],
+      "description": "JSON document input"
+    },
+    {
+      "name": "input-graphql",
+      "type": "string",
+      "occurs": "?",
+      "aliases": [
+        "inputGraphql"
+      ],
+      "description": "GraphQL document input"
+    },
+    {
+      "name": "input-file",
+      "type": "string",
+      "occurs": "?",
+      "aliases": [
+        "inputFile"
+      ],
+      "description": "Path to file containing JSON document input"
+    }
+  ],
+  "product": {
+    "name": "aws",
+    "supported": ">=2.34.0 <3.0.0",
+    "detect": {
+      "argv": [
+        "aws",
+        "--version"
+      ],
+      "pattern": "aws-cli/(\\d+\\.\\d+\\.\\d+)"
+    }
+  }
+}

@@ -66,6 +66,24 @@ const fs = require('node:fs');
 const argv = process.argv.slice(2);
 const recordFile = ${JSON.stringify(recordFile)};
 const scenarioFile = ${JSON.stringify(scenarioFile)};
+
+let scenario = {};
+try { scenario = JSON.parse(fs.readFileSync(scenarioFile, 'utf8')); } catch {}
+
+// Check explicit rule matching first
+let response = undefined;
+if (Array.isArray(scenario.rules)) {
+  for (const rule of scenario.rules) {
+    if (rule.match.every((t) => argv.includes(t))) { response = rule.response; break; }
+  }
+}
+
+if (!response && argv.includes('--version')) {
+  process.stdout.write('aws-cli/2.34.48 Python/3.14.4 Linux/7.0.0-1014-aws exe/aarch64.ubuntu.24\\n');
+  process.exitCode = 0;
+  return;
+}
+
 let index = 0;
 try {
   index = fs.readFileSync(recordFile, 'utf8').split('\\n').filter(Boolean).length;
@@ -73,13 +91,9 @@ try {
 const env = {};
 for (const k of ${JSON.stringify(RECORDED_ENV)}) env[k] = k in process.env ? process.env[k] : null;
 fs.appendFileSync(recordFile, JSON.stringify({ argv, env, cwd: process.cwd() }) + '\\n');
-let scenario = {};
-try { scenario = JSON.parse(fs.readFileSync(scenarioFile, 'utf8')); } catch {}
-let response = scenario.sequence ? scenario.sequence[index] : undefined;
-if (!response && Array.isArray(scenario.rules)) {
-  for (const rule of scenario.rules) {
-    if (rule.match.every((t) => argv.includes(t))) { response = rule.response; break; }
-  }
+
+if (!response && scenario.sequence) {
+  response = scenario.sequence[index];
 }
 response = response || scenario.default || {};
 if (response.sleepMs) Atomics.wait(new Int32Array(new SharedArrayBuffer(4)), 0, 0, response.sleepMs);

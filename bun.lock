@@ -5,7 +5,7 @@
     "": {
       "name": "@lmctl-ai/lmaws",
       "dependencies": {
-        "@lmctl-ai/lmts": "git+https://github.com/lmctl-ai/lmts.git#main",
+        "@lmctl-ai/lmts": "git+https://github.com/lmctl-ai/lmts.git#v0.3.0",
       },
       "devDependencies": {
         "@types/bun": "^1.4.2",
@@ -15,7 +15,7 @@
     },
   },
   "packages": {
-    "@lmctl-ai/lmts": ["@lmctl-ai/lmts@github:lmctl-ai/lmts#b0744ce", { "dependencies": { "cross-spawn": "^7.0.6" } }, "lmctl-ai-lmts-b0744ce", "sha512-3eHnWYPRZFqnMGOfHMK+3JS4xalEWw8GjhugMw5v40xwplv6s5yjZOFlQ+mgez4A1kQECKrCuhYgW1F0ij7zlQ=="],
+    "@lmctl-ai/lmts": ["@lmctl-ai/lmts@github:lmctl-ai/lmts#677858e", { "dependencies": { "cross-spawn": "^7.0.6" } }, "lmctl-ai-lmts-677858e", "sha512-EKbJK4+afKU8CHI0yC0nCb8+DaRrQhXoG/s1BlV/Hd5JQfgXPPX/lpGrj3t5KcV2VM3qcLjfFw/ChF6YQjGjnQ=="],
 
     "@types/bun": ["@types/bun@1.4.2", "", { "dependencies": { "bun-types": "1.4.2" } }, "sha512-GimotNn7+ZV0uVArItBbriZsR1oNf0+WTzPkdcFrzShI7k2norL0uzEaJT8T33dWr7O/c9ZDuAFQrctKCi72oQ=="],
 

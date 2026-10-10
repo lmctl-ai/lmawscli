@@ -1,0 +1,19 @@
+// access: read
+// What it does: Lists all S3 buckets in the AWS account with creation dates.
+// When to use it: Discover available S3 storage buckets or verify bucket provisioning.
+// How to run: lmscript examples/list-buckets.lms
+// How to preview: lmscript --dry-run examples/list-buckets.lms
+import "@lmctl-ai/lmaws";
+
+r = aws2.s3_list_buckets({});
+
+if (r.status == "simulated") {
+  println("would run: aws2.s3_list_buckets");
+} else if (r.status != "ok") {
+  println("Error:", get(r, "error.message", "failed to list buckets"));
+  exit(1);
+} else {
+  for (b in r.result.Buckets) {
+    println(f"{b.Name} (created: {b.CreationDate})");
+  }
+}

@@ -26,7 +26,5 @@ jobs:
           bun-version-file: .bun-version
       - name: Install
         run: bun install --frozen-lockfile
-      - name: Typecheck
-        run: bunx tsc --noEmit
-      - name: Test with coverage
-        run: bun test --coverage
+      - name: Verify (typecheck and tests with coverage)
+        run: bun run verify
