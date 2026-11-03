@@ -1,3 +1,7 @@
+> **Archived — 2026-11-02.** This legacy lmapi tool is retired following consolidation on the lmcode host contract and retirement of lmapi schema-module imports in lmscript.
+> Replacement: [lmaws, the maintained AWS SDK host](https://github.com/lmctl-ai/lmaws).
+> Source, history, tags and existing releases are retained for reference. Replacement APIs and policy behavior differ; follow the successor documentation.
+
 # lmaws — `aws2`, a structured AWS CLI
 
 `aws2` runs `aws` (argv only, pager and auto-prompt off, always `--output json`) and returns JSON. It offers curated typed operations, a generic `run` whose read/write class comes from per-service metadata, an allowlisted `lm_query` with redaction, JSON-Pointer `--select` and deadlines, and client-side pagination. Credentials are the AWS CLI's own.
